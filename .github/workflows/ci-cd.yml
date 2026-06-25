@@ -1,4 +1,4 @@
-name: Build and Deploy to AKS
+name: Build and Deploy to AKS (Full Auto)
 
 on:
   push:
@@ -9,20 +9,27 @@ permissions:
   contents: read
 
 env:
-  ACR_NAME: ${{ vars.ACR_NAME }}
   ACR_LOGIN_SERVER: ${{ vars.ACR_LOGIN_SERVER }}
+  ACR_NAME: ${{ vars.ACR_NAME }}
   RESOURCE_GROUP: ${{ vars.RESOURCE_GROUP }}
   AKS_CLUSTER_NAME: ${{ vars.AKS_CLUSTER_NAME }}
+  NAMESPACE: qa
 
 jobs:
-  build-and-deploy:
+  build-deploy:
     runs-on: ubuntu-latest
 
     steps:
 
+    # =========================
+    # 1. Checkout
+    # =========================
     - name: Checkout Code
       uses: actions/checkout@v4
 
+    # =========================
+    # 2. Azure Login
+    # =========================
     - name: Azure Login
       uses: azure/login@v2
       with:
@@ -34,62 +41,65 @@ jobs:
             "tenantId":"${{ secrets.AZURE_TENANT_ID }}"
           }
 
+    # =========================
+    # 3. Login to ACR
+    # =========================
     - name: Login to ACR
       run: |
         az acr login --name $ACR_NAME
 
     # =========================
-    # IMAGE TAGS (IMPORTANT)
+    # 4. Define Tags
     # =========================
-    - name: Define Image Tags
+    - name: Set Image Tags
       run: |
         echo "SHORT_SHA=${GITHUB_SHA::7}" >> $GITHUB_ENV
         echo "RUN_NUMBER=${GITHUB_RUN_NUMBER}" >> $GITHUB_ENV
 
     # =========================
-    # BUILD BACKEND
+    # 5. Build Backend
     # =========================
     - name: Build Backend Image
       run: |
         docker build \
           -t $ACR_LOGIN_SERVER/backend:${RUN_NUMBER} \
-          -t $ACR_LOGIN_SERVER/backend:latest \
           -t $ACR_LOGIN_SERVER/backend:${SHORT_SHA} \
+          -t $ACR_LOGIN_SERVER/backend:latest \
           -f server/Dockerfile \
           ./server
 
     # =========================
-    # BUILD FRONTEND
+    # 6. Build Frontend
     # =========================
     - name: Build Frontend Image
       run: |
         docker build \
           -t $ACR_LOGIN_SERVER/frontend:${RUN_NUMBER} \
-          -t $ACR_LOGIN_SERVER/frontend:latest \
           -t $ACR_LOGIN_SERVER/frontend:${SHORT_SHA} \
+          -t $ACR_LOGIN_SERVER/frontend:latest \
           -f client/Dockerfile \
           ./client
 
     # =========================
-    # PUSH BACKEND
+    # 7. Push Backend
     # =========================
     - name: Push Backend Image
       run: |
         docker push $ACR_LOGIN_SERVER/backend:${RUN_NUMBER}
-        docker push $ACR_LOGIN_SERVER/backend:latest
         docker push $ACR_LOGIN_SERVER/backend:${SHORT_SHA}
+        docker push $ACR_LOGIN_SERVER/backend:latest
 
     # =========================
-    # PUSH FRONTEND
+    # 8. Push Frontend
     # =========================
     - name: Push Frontend Image
       run: |
         docker push $ACR_LOGIN_SERVER/frontend:${RUN_NUMBER}
-        docker push $ACR_LOGIN_SERVER/frontend:latest
         docker push $ACR_LOGIN_SERVER/frontend:${SHORT_SHA}
+        docker push $ACR_LOGIN_SERVER/frontend:latest
 
     # =========================
-    # AKS ACCESS
+    # 9. Set AKS Context
     # =========================
     - name: Set AKS Context
       run: |
@@ -98,9 +108,57 @@ jobs:
           --name $AKS_CLUSTER_NAME \
           --overwrite-existing
 
-    - name: Verify Cluster
+    # =========================
+    # 10. Deploy to AKS (AUTO)
+    # =========================
+    - name: Deploy Backend to AKS
       run: |
-        kubectl get nodes
+        kubectl set image deployment/backend \
+          backend=$ACR_LOGIN_SERVER/backend:${RUN_NUMBER} \
+          -n $NAMESPACE
+
+    - name: Deploy Frontend to AKS
+      run: |
+        kubectl set image deployment/frontend \
+          frontend=$ACR_LOGIN_SERVER/frontend:${RUN_NUMBER} \
+          -n $NAMESPACE
+
     # =========================
-    # AKS DEPLOYMENT
+    # 11. Rollout Status Check
     # =========================
+    - name: Verify Backend Rollout
+      run: |
+        kubectl rollout status deployment/backend -n $NAMESPACE
+
+    - name: Verify Frontend Rollout
+      run: |
+        kubectl rollout status deployment/frontend -n $NAMESPACE
+
+    # =========================
+    # 12. Final Cluster Check
+    # =========================
+    - name: Check Pods
+      run: |
+        kubectl get pods -n $NAMESPACE
+
+# 🚀 Fully automated pipeline:
+#       GitHub Push
+#           ↓
+#       Build Docker Images
+#           ↓
+#       Push to ACR
+#           ↓
+#       AKS Deployment Update
+#           ↓
+#       Rolling Update
+#           ↓
+#       Verification
+
+# 🔥 What makes this “production-grade”
+
+# ✔ No manual kubectl needed
+# ✔ Version-controlled deployments
+# ✔ Safe rolling updates
+# ✔ Rollout verification
+# ✔ Multi-tag strategy
+# ✔ Reproducible builds
