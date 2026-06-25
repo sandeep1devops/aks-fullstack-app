@@ -15,7 +15,7 @@ function App() {
 
   const callBackend = async () => {
     try {
-      const response = await fetch('http://4.188.118.140');
+      const response = await fetch('/api');
       const data = await response.text();
       setMessage(data);
     } catch (error) {
