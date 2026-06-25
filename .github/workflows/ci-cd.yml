@@ -101,3 +101,6 @@ jobs:
     - name: Verify Cluster
       run: |
         kubectl get nodes
+    # =========================
+    # AKS DEPLOYMENT
+    # =========================
