@@ -15,6 +15,6 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: frontend:v1
+        image: sandeepacr20260608.azurecr.io/frontend:latest
         ports:
         - containerPort: 80

@@ -15,6 +15,6 @@ spec:
     spec:
       containers:
       - name: backend
-        image: sandeepacr20260608.azurecr.io/backend:v1
+        image: sandeepacr20260608.azurecr.io/backend:latest
         ports:
         - containerPort: 3000
