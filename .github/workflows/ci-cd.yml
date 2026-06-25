@@ -8,6 +8,12 @@ on:
 permissions:
   contents: read
 
+env:
+  ACR_NAME: ${{ vars.ACR_NAME }}
+  ACR_LOGIN_SERVER: ${{ vars.ACR_LOGIN_SERVER }}
+  RESOURCE_GROUP: ${{ vars.RESOURCE_GROUP }}
+  AKS_CLUSTER_NAME: ${{ vars.AKS_CLUSTER_NAME }}
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -30,35 +36,66 @@ jobs:
 
     - name: Login to ACR
       run: |
-        az acr login --name ${{ vars.ACR_NAME }}
+        az acr login --name $ACR_NAME
 
+    # =========================
+    # IMAGE TAGS (IMPORTANT)
+    # =========================
+    - name: Define Image Tags
+      run: |
+        echo "SHORT_SHA=${GITHUB_SHA::7}" >> $GITHUB_ENV
+        echo "RUN_NUMBER=${GITHUB_RUN_NUMBER}" >> $GITHUB_ENV
+
+    # =========================
+    # BUILD BACKEND
+    # =========================
     - name: Build Backend Image
       run: |
         docker build \
-          -t ${{ vars.ACR_LOGIN_SERVER }}/backend:${{ github.run_number }} \
+          -t $ACR_LOGIN_SERVER/backend:${RUN_NUMBER} \
+          -t $ACR_LOGIN_SERVER/backend:latest \
+          -t $ACR_LOGIN_SERVER/backend:${SHORT_SHA} \
           -f server/Dockerfile \
           ./server
 
+    # =========================
+    # BUILD FRONTEND
+    # =========================
     - name: Build Frontend Image
       run: |
         docker build \
-          -t ${{ vars.ACR_LOGIN_SERVER }}/frontend:${{ github.run_number }} \
+          -t $ACR_LOGIN_SERVER/frontend:${RUN_NUMBER} \
+          -t $ACR_LOGIN_SERVER/frontend:latest \
+          -t $ACR_LOGIN_SERVER/frontend:${SHORT_SHA} \
           -f client/Dockerfile \
           ./client
 
+    # =========================
+    # PUSH BACKEND
+    # =========================
     - name: Push Backend Image
       run: |
-        docker push ${{ vars.ACR_LOGIN_SERVER }}/backend:${{ github.run_number }}
+        docker push $ACR_LOGIN_SERVER/backend:${RUN_NUMBER}
+        docker push $ACR_LOGIN_SERVER/backend:latest
+        docker push $ACR_LOGIN_SERVER/backend:${SHORT_SHA}
 
+    # =========================
+    # PUSH FRONTEND
+    # =========================
     - name: Push Frontend Image
       run: |
-        docker push ${{ vars.ACR_LOGIN_SERVER }}/frontend:${{ github.run_number }}
+        docker push $ACR_LOGIN_SERVER/frontend:${RUN_NUMBER}
+        docker push $ACR_LOGIN_SERVER/frontend:latest
+        docker push $ACR_LOGIN_SERVER/frontend:${SHORT_SHA}
 
+    # =========================
+    # AKS ACCESS
+    # =========================
     - name: Set AKS Context
       run: |
         az aks get-credentials \
-          --resource-group ${{ vars.RESOURCE_GROUP }} \
-          --name ${{ vars.AKS_CLUSTER_NAME }} \
+          --resource-group $RESOURCE_GROUP \
+          --name $AKS_CLUSTER_NAME \
           --overwrite-existing
 
     - name: Verify Cluster
