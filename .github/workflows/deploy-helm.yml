@@ -1,4 +1,3 @@
-```yaml
 name: Build and Deploy to AKS using Helm
 
 on:
