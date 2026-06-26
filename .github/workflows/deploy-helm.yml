@@ -146,7 +146,7 @@ jobs:
           --namespace $NAMESPACE \
           --create-namespace \
           --wait \
-          --atomic \
+          --rollback-on-failure \
           --set frontend.image.repository=$ACR_LOGIN_SERVER/frontend \
           --set frontend.image.tag=${RUN_NUMBER} \
           --set backend.image.repository=$ACR_LOGIN_SERVER/backend \
