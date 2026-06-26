@@ -1,0 +1,18 @@
+frontend:
+  replicas: 1
+  image:
+    repository: sandeepacr20260608.azurecr.io/frontend
+    tag: "7"
+
+backend:
+  replicas: 1
+  image:
+    repository: sandeepacr20260608.azurecr.io/backend
+    tag: "7"
+
+mysql:
+  storage: 5Gi
+  replicas: 1
+  image:
+    repository: mysql
+    tag: "8.0"
