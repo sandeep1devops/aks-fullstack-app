@@ -3,18 +3,31 @@ kind: Deployment
 metadata:
   name: frontend
   namespace: qa
+
 spec:
   replicas: 1
+
   selector:
     matchLabels:
       app: frontend
+
   template:
     metadata:
       labels:
         app: frontend
+
     spec:
       containers:
       - name: frontend
         image: sandeepacr20260608.azurecr.io/frontend:latest
+
         ports:
         - containerPort: 80
+
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "500m"
+            memory: "512Mi"
