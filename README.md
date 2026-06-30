@@ -1,325 +1,150 @@
-🔥AKS Production DevOps Project Roadmap
-🏆Project Done in June-2026, 
-
-🧱 Phase 1 — Build the AKS Application ✅ COMPLETED
-Step 1 — Create Namespace
-Create namespace
-kubectl create namespace qa
-Verify
-kubectl get ns
-👉Step 2 — Deploy MySQL
-mysql-deployment.yaml
-mysql-service.yaml
-pvc.yaml
-secret.yaml
-
-👉Deploy:
-kubectl apply -f secret.yaml -n qa
-kubectl apply -f pvc.yaml -n qa
-kubectl apply -f mysql-deployment.yaml -n qa
-kubectl apply -f mysql-service.yaml -n qa
-Verify:
-kubectl get all -n qa
-kubectl get pvc -n qa
-kubectl logs deployment/mysql -n qa
-Step 3 — Deploy Backend
-
-👉Created:
-backend-deployment.yaml
-backend-service.yaml
-configmap.yaml
-secret.yaml
-
-👉Deploy:
-kubectl apply -f configmap.yaml -n qa
-kubectl apply -f secret.yaml -n qa
-kubectl apply -f backend-deployment.yaml -n qa
-kubectl apply -f backend-service.yaml -n qa
-
-👉Verify:
-kubectl get deploy -n qa
-kubectl get svc -n qa
-kubectl logs deployment/backend -n qa
-Step 4 — Deploy Frontend
-
-👉Created:
-frontend-deployment.yaml
-frontend-service.yaml
-
-👉Deploy:
-kubectl apply -f frontend-deployment.yaml -n qa
-kubectl apply -f frontend-service.yaml -n qa
-
-👉Verify:
-kubectl get all -n qa
-
-🧱 Phase 2 — Docker Containerization ✅ COMPLETED
-
-👉Build images
-docker build -t frontend:v1 .
-docker build -t backend:v1 .
-
-👉Test locally:
-docker run
-
-👉Skills Learned:
-Dockerfile
-Docker Images
-Docker Containers
-Port Mapping
-
-🧱 Phase 3 — Azure Container Registry (ACR) ✅ COMPLETED
-Create Registry:
-az acr create
-
-👉Login:
-az acr login
-Tag Images:
-docker tag frontend:v1 <acr>.azurecr.io/frontend:v1
-docker tag backend:v1 <acr>.azurecr.io/backend:v1
-
-👉Push:
-docker push <acr>.azurecr.io/frontend:v1
-docker push <acr>.azurecr.io/backend:v1
-
-👉Verify:
-az acr repository list
-
-🧱 Phase 4 — AKS Pull Images from ACR ✅ COMPLETED
-
-👉Attach ACR:
-az aks update --attach-acr <acr> --name <aks> --resource-group <rg>
-
-Updated Deployment YAML
-image:
-    <acr>.azurecr.io/frontend:7
-
-Redeploy"
-kubectl apply -f .
-
-🧱 Phase 5 — GitHub Actions CI/CD ✅ COMPLETED
-
-Repository
-frontend/
-backend/
-.github/workflows
-
-Pipeline Flow:
-
-Git Push
-
-↓
-
-Build Docker Image
-
-↓
-
-Push to ACR
-
-↓
-
-kubectl Apply / Helm Upgrade
-
-↓
-
-Deploy to AKS
-
-Skills
-
-GitHub Actions
-Azure Login
-Build Pipeline
-CD Pipeline
-ACR Authentication
-🧱 Phase 6 — NGINX Ingress ✅ COMPLETED
-
-👉Install:
-kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/cloud/deploy
-
-Verify:
-kubectl get pods -n ingress-nginx
-Created:
-ingress.yaml
-Routing
-
-/
-
-↓
-
-Frontend
-
-/api
-
-↓
-
-Backend
-Verify:
-kubectl get ingress
-
-🧱 Phase 7 — Helm Charts ✅ COMPLETED
-
-Created:
-qa-app/
-Contains
-
-Chart.yaml
-values.yaml
-templates/
-backend-deployment.yaml
-frontend-deployment.yaml
-mysql-deployment.yaml
-backend-service.yaml
-frontend-service.yaml
-mysql-service.yaml
-configmap.yaml
-secret.yaml
-pvc.yaml
-ingress.yaml
-
-👉Validate:
-helm lint .
-Renderp
-helm template qa-app .
-Deploy:
-helm install qa-app .
-Upgrade:
-helm upgrade qa-app .
-Rollback:
-helm rollback qa-app 1
-
-List Releases
-helm list
-History:
-helm history qa-app
-🧱 Phase 8 — Helm CI/CD ✅ COMPLETED
-
-Pipeline
-Git Push
-↓
-Build Docker
-↓
-Push ACR
-↓
-helm upgrade --install
-↓
-AKS Updated
-Skills
-Helm Automation
-CI/CD
-
-👉Zero-downtime Upgrade
-👉Current Production Skills Achieved
-
-✅ Docker
-✅ Azure Container Registry
-✅ Azure Kubernetes Service
-✅ Kubernetes Deployments
-✅ Kubernetes Services
-✅ ConfigMaps
-✅ Secrets
-✅ Persistent Volumes
-✅ Persistent Volume Claims
-✅ Namespace Management
-✅ NGINX Ingress
-✅ React + Node Deployment
-✅ MySQL Deployment
-✅ GitHub Actions
-✅ Azure Authentication
-✅ Helm Charts
-✅ Helm Upgrade
-✅ Helm Rollback
-✅ Helm CI/CD
-✅ Container Image Lifecycle
-✅ Rolling Updates
-✅ Troubleshooting Production Issues
-
-🏆 Skills Demonstrated in This Project (Updated) – 26 June 2026
-☁️ Azure Cloud
+🏆 Current Production Skills Achieved (July 2026)
+☁️ Microsoft Azure
 ✅ Azure Kubernetes Service (AKS)
 ✅ Azure Container Registry (ACR)
-✅ Azure Authentication (Service Principal)
+✅ Azure Resource Groups
 ✅ Azure CLI
+✅ Azure Service Principal Authentication
+✅ AKS Credential Management
+✅ Azure Kubernetes Namespace Management
 🐳 Containerization
 ✅ Docker
-✅ Multi-container application deployment
-✅ Docker image versioning and tagging
-✅ Container image lifecycle management
-✅ Docker build and push automation
+✅ Dockerfile Creation
+✅ Multi-stage Docker Builds
+✅ Multi-container Application Deployment
+✅ Docker Image Versioning
+✅ Docker Image Tagging
+✅ Latest & Versioned Image Strategy
+✅ Container Image Lifecycle Management
+✅ Docker Build Automation
+✅ Docker Push Automation
 ☸️ Kubernetes
-✅ Kubernetes Deployments
-✅ Kubernetes Services (ClusterIP)
-✅ Kubernetes Namespaces
+Core Resources
+✅ Deployments
+✅ ReplicaSets
+✅ Pods
+✅ Services (ClusterIP)
+✅ Namespaces
+✅ Labels & Selectors
+Configuration
 ✅ ConfigMaps
 ✅ Secrets
+✅ Environment Variables
+✅ Image Pull Policy
+Storage
+✅ Persistent Volumes (PV)
 ✅ Persistent Volume Claims (PVC)
 ✅ Storage Classes
-✅ Kubernetes Ingress
+Networking
+✅ Kubernetes Services
 ✅ NGINX Ingress Controller
-✅ ReplicaSets
-✅ Kubernetes Rollout Strategy
-✅ Kubernetes Rollback concepts
-✅ Resource troubleshooting
-✅ Production-style debugging
+✅ Ingress Rules
+✅ Path-based Routing
+✅ Backend API Routing
+✅ Frontend Routing
+Scaling
+✅ Horizontal Pod Autoscaler (HPA)
+✅ CPU-based Auto Scaling
+✅ Metrics Server Integration
+Deployment Strategy
+✅ Rolling Updates
+✅ Rollout Status
+✅ Rollback Concepts
+✅ Deployment Verification
+Troubleshooting
+✅ kubectl Debugging
+✅ Logs Analysis
+✅ Events Analysis
+✅ Describe Resources
+✅ Production-style Troubleshooting
+✅ Namespace Troubleshooting
+✅ Ingress Troubleshooting
+✅ Image Pull Issue Resolution
 📦 Helm
 ✅ Helm Installation
 ✅ Helm Chart Creation
-✅ Helm Chart Structure
-✅ Helm Templating
-✅ values.yaml Parameterization
-✅ Helm Lint Validation
-✅ Helm Release Management
-✅ Helm Upgrade Strategy
+✅ Helm Directory Structure
+✅ Helm Templates
+✅ values.yaml
+✅ Parameterized Deployments
+✅ Helm Variables
+✅ Helm Lint
+✅ Helm Template Validation
+✅ Helm Dry Run
+✅ Helm Upgrade
+✅ Helm Install
+✅ Helm Rollback
 ✅ Helm History
-✅ Helm-based Kubernetes Deployment
-✅ Migration from Kubernetes YAML to Helm
-✅ Helm Best Practices
+✅ Helm Release Management
+✅ Helm-based CI/CD
+✅ Migration from Raw Kubernetes YAML to Helm
+✅ Production Helm Best Practices
 🚀 CI/CD
 ✅ GitHub Actions
-✅ CI/CD Pipeline Design
-✅ Automated Docker Build
-✅ Automated Image Push to ACR
-✅ Automated AKS Deployment
-✅ Helm-based CI/CD
-✅ Branch-based CI/CD Strategy
-✅ Pipeline Validation
+✅ Branch-based CI/CD
+✅ Build Automation
+✅ Docker Build Pipeline
+✅ Docker Push Pipeline
+✅ Azure Login
+✅ ACR Authentication
+✅ AKS Authentication
+✅ Kubernetes Deployment Automation
+✅ Helm Deployment Automation
+✅ Deployment Verification
 ✅ Rollout Verification
-🌐 Application Deployment
-✅ React Frontend Deployment
-✅ Node.js Backend Deployment
-✅ MySQL Deployment on Kubernetes
-✅ Full Stack Application Deployment
-✅ Ingress-based Routing
-✅ Backend API Exposure
-✅ Frontend–Backend Integration
-🔧 DevOps & Git
+✅ Pipeline Troubleshooting
+✅ Environment Variables
+✅ GitHub Secrets
+✅ GitHub Variables
+🌐 Full Stack Deployment
+✅ React Frontend
+✅ Node.js Backend
+✅ MySQL Database
+✅ Full Stack Deployment
+✅ Frontend–Backend Communication
+✅ API Routing
+✅ NGINX Ingress Exposure
+✅ Production-style Folder Structure
+🔧 Git & GitHub
 ✅ Git Branching Strategy
+✅ Main Branch Deployment
 ✅ Feature Branch Workflow
-✅ GitHub Repository Management
-✅ Infrastructure Troubleshooting
-✅ Production-style Issue Resolution
-✅ Configuration Management
+✅ Helm Deployment Branch
+✅ Repository Management
+✅ Merge Conflict Resolution
+✅ Git Troubleshooting
+✅ Production Git Workflow
 📋 DevOps Best Practices
-✅ Infrastructure as Code concepts
-✅ Parameterized deployments
-✅ Environment-independent configuration
-✅ Version-controlled deployments
-✅ Immutable container images
-✅ Automated deployments
-✅ Deployment verification
-✅ Release management
-✅ Standardized Helm chart structure
-⭐ Overall Project Highlights
-✅ Built a full-stack React + Node.js + MySQL application.
-✅ Containerized the application using Docker.
-✅ Stored container images in Azure Container Registry.
-✅ Deployed the application to Azure Kubernetes Service.
-✅ Exposed services through an NGINX Ingress Controller.
-✅ Automated deployments with GitHub Actions.
-✅ Migrated from raw Kubernetes manifests to Helm charts.
-✅ Implemented a complete Helm-based CI/CD pipeline.
-✅ Maintained both kubectl-based and Helm-based deployment workflows.
-✅ Followed production-style deployment and troubleshooting practices.
-===========================================================================================================================
+✅ Infrastructure as Code Concepts
+✅ Parameterized Configuration
+✅ Environment-independent Deployments
+✅ Immutable Docker Images
+✅ Version-controlled Infrastructure
+✅ Release Management
+✅ Production Repository Structure
+✅ Standardized Helm Charts
+✅ Deployment Verification
+✅ Rollback Strategy
+✅ Separate kubectl & Helm Deployment Pipelines
+⭐ Major Production Achievements
+✅ Built a complete React + Node.js + MySQL application.
+✅ Containerized every application component.
+✅ Published images to Azure Container Registry.
+✅ Deployed applications to Azure Kubernetes Service.
+✅ Implemented both raw Kubernetes and Helm deployment strategies.
+✅ Built two independent GitHub Actions pipelines:
+kubectl-based deployment
+Helm-based deployment
+✅ Configured NGINX Ingress Controller for routing.
+✅ Implemented ConfigMaps and Secrets.
+✅ Configured Persistent Volume Claims for MySQL.
+✅ Enabled Horizontal Pod Autoscaler (HPA).
+✅ Implemented production-style troubleshooting workflows.
+✅ Built a reusable Helm chart for application deployment.
+✅ Validated Helm charts using linting and dry runs.
+✅ Implemented automated image versioning and tagging.
+✅ Separated deployments into independent namespaces (qa and qa-helm) to support both deployment methods simultaneously.
+=============================================================================================================
 👉 Remaining Production-Level Phases
 🧱 Phase 9 — Horizontal Pod Autoscaler (HPA)
 Metrics Server
