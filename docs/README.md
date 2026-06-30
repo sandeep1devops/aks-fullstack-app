@@ -144,133 +144,131 @@ Helm-based deployment
 ✅ Validated Helm charts using linting and dry runs.
 ✅ Implemented automated image versioning and tagging.
 ✅ Separated deployments into independent namespaces (qa and qa-helm) to support both deployment methods simultaneously.
+
+✅ Phase 9 — Horizontal Pod Autoscaler (HPA): Completed
 =============================================================================================================
-👉 Remaining Production-Level Phases
-🧱 Phase 9 — Horizontal Pod Autoscaler (HPA)
-Metrics Server
-Resource Requests
-Resource Limits
-CPU Scaling
-Memory Scaling
-Commands:
-kubectl autoscale deployment backend \
---cpu-percent=50 \
---min=2 \
---max=10
-
+🟡 Remaining Production-Level Phases
 🧱 Phase 10 — Health Probes
-Implement
-Startup Probe
-Readiness Probe
-Liveness Probe
-Verify
-kubectl describe pod
 
-🧱 Phase 11 — RBAC
-Learn
-ServiceAccount
-Role
-ClusterRole
-RoleBinding
-ClusterRoleBinding
-Commands:
-kubectl get sa
-kubectl get roles
+⬜ Startup Probe
+⬜ Readiness Probe
+⬜ Liveness Probe
+⬜ Verify with kubectl describe pod
 
-kubectl get rolebindings
-🧱 Phase 12 — Monitoring
+🧱 Phase 11 — Production Security
 
-Install:
+⬜ Service Accounts
+⬜ RBAC (Role-Based Access Control)
+⬜ Network Policies
+⬜ Pod Security Context
+⬜ Container Security Context
+⬜ Non-root Containers
+⬜ Read-only Root Filesystem
+⬜ Image Pull Secrets (if needed)
+
+🧱 Phase 12 — Production Monitoring
+
+⬜ Prometheus
+⬜ Grafana
+⬜ Kubernetes Dashboard (optional)
+⬜ Application Metrics
+⬜ Custom Dashboards
+⬜ AlertManager
+⬜ Alert Rules
+
+🧱 Phase 13 — Production Logging
+
+⬜ Fluent Bit / Fluentd
+⬜ Elasticsearch / OpenSearch
+⬜ Kibana
+⬜ Centralized Log Collection
+⬜ Log Search & Analysis
+
+🧱 Phase 14 — GitOps
+
+⬜ Argo CD
+⬜ GitOps Deployment
+⬜ Automatic Sync
+⬜ Self-Healing Applications
+⬜ Rollback via Git
+
+🧱 Phase 15 — Production Reliability
+
+⬜ Pod Disruption Budget (PDB)
+⬜ Pod Anti-Affinity
+⬜ Node Affinity
+⬜ Taints & Tolerations
+⬜ Topology Spread Constraints
+
+🧱 Phase 16 — Advanced Kubernetes
+
+⬜ StatefulSets
+⬜ DaemonSets
+⬜ Jobs
+⬜ CronJobs
+⬜ Init Containers
+⬜ Sidecar Containers
+⬜ Ephemeral Containers
+
+🧱 Phase 17 — Production DevOps
+
+⬜ Blue/Green Deployment
+⬜ Canary Deployment
+⬜ Progressive Delivery
+⬜ KEDA Event-driven Autoscaling
+⬜ External Secrets
+⬜ Sealed Secrets
+===================================================================================
+🔥 Failure Labs (Practice Regularly)
+CrashLoopBackOff
+ImagePullBackOff
+ErrImagePull
+OOMKilled
+Pending Pods
+Failed Scheduling
+PVC Pending
+Multi-Attach Volume
+Broken Ingress
+Failed Rollouts
+DNS Resolution Issues
+
+📚 Interview Revision Topics
+Docker
+Azure Container Registry
+AKS
+Kubernetes Architecture
+Deployments
+ReplicaSets
+Services
+ConfigMaps
+Secrets
+PV/PVC
+Ingress
+Helm
+GitHub Actions
+Rolling Updates
+Rollbacks
+Resource Requests & Limits
+HPA
+Health Probes
+RBAC
 Prometheus
 Grafana
-Commands:
-kubectl top pods
-kubectl top nodes
-
-Create:
-CPU Dashboard
-Memory Dashboard
-Pod Dashboard
-Namespace Dashboard
-
-🧱 Phase 13 — Azure Key Vault Integration
-Install
-Secrets Store CSI Driver
-Azure Provider
-Learn
-Managed Identity
-Key Vault
-Secret Rotation
-CSI Driver
-
-🧱Phase 14 — Network Policies
-
-Create
-Default Deny
-Frontend → Backend
-Backend → MySQL
-Learn
-Ingress Rules
-Egress Rules
-
-Namespace Isolation
-🧱 Phase 15 — GitOps with Argo CD
-
-Install:
-ArgoCD
-Create
-Application
-Repository
-Automatic Sync
-Self Heal
-Pruning
-
-Pipeline:
-Git Push
-↓
-ArgoCD detects change
-↓
-Deploy AKS
-
-🧱 Phase 16 — Centralized Logging
-
-Install:
-Fluent Bit
-Elasticsearch
-Kibana
-(or)
-Azure Monitor
-Log Analytics
-Learn
-kubectl logs
-Container Logs
-Application Logs
-Cluster Logs
-Search
-Dashboards
-Alerts
-
-🧱 Final Production Roadmap Progress
-Phase	Status:
-Build AKS Application	      ✅ Completed
-Docker	                    ✅ Completed
-Azure Container Registry	  ✅ Completed
-AKS Integration	            ✅ Completed
-GitHub Actions CI/CD	      ✅ Completed
-NGINX Ingress	              ✅ Completed
-Helm Charts	                ✅ Completed
-Helm GitHub Pipeline	      ✅ Completed
-HPA	                        ⏳ Remaining
-Health Probes	              ⏳ Remaining
-RBAC	                      ⏳ Remaining
-Prometheus + Grafana	      ⏳ Remaining
-Azure Key Vault	            ⏳ Remaining
-Network Policies	          ⏳ Remaining
-Argo CD	                    ⏳ Remaining
-Logging	                    ⏳ Remaining
-**Overall Progress:**
-You have completed 8 of the 16 major production phases (50%). More importantly, you've finished the foundational
-platform engineering work: building, containerizing, deploying, exposing, automating with CI/CD, and packaging with Helm.
-
-The remaining phases focus on production operations and platform maturity—observability, security, autoscaling, GitOps,
-and operational resilience. Completing these will bring your project much closer to what is expected of a senior DevOps or Platform Engineer in a production AKS environment.
+Argo CD
+Network Policies
+Troubleshooting
+===================================================================================
+README.md
+│
+├── Project Overview
+├── Architecture Diagram
+├── Technology Stack
+├── Current Production Skills Achieved
+├── Major Production Achievements
+├── Project Folder Structure
+├── Deployment Workflow
+├── Current Progress
+├── Remaining Production Roadmap
+├── Failure Labs
+├── Interview Topics
+├── Future Enhancements
